@@ -19,7 +19,7 @@ const cli = meow(`
     --url                 Markdown url at github.com
     --css                 Add style tag
     --open                Open pdf
-    --o, --ouput          Output path
+    -o, --ouput           Output path
     -i, --interactive     Interactive mode
 
   Examples

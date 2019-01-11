@@ -1,5 +1,6 @@
 const puppeteer = require('puppeteer')
 const path = require('path')
+const opn = require('opn')
 
 module.exports = async (url, flags, options) => {
   puppeteer.launch({
@@ -18,11 +19,12 @@ module.exports = async (url, flags, options) => {
     const bodyHandle = await page.$('body');
     await page.evaluate(body => {
       const el = body.querySelector('div#readme')
-      el.firstElementChild.style.cssText = 'border: 0px'
-
-      const html = el.outerHTML
-      body.innerHTML = html
+      body.innerHTML = el.outerHTML
     }, bodyHandle)
+
+    await page.addStyleTag({
+      path: path.resolve(__dirname, './assets/default.css')
+    })
 
     /**
      * TODO:
@@ -46,6 +48,8 @@ module.exports = async (url, flags, options) => {
     } catch (err) {
       console.log(err)
     }
+
+    opn(options.path)
 
     browser.close()
   })
