@@ -6,7 +6,10 @@
 $ npm install -g gitpdf
 
 $ gitpdf https://github.com/rhiokim/gitpdf/blob/master/README.md
-$ gitpdf https://github.com/jquery/jquery/blob/master/README.md --css=./default.css
+$ gitpdf https://github.com/jquery/jquery/blob/master/README.md --css=./default.css --output=./result.pdf
+
+# interactive mode
+$ gitpdf -i
 ```
 
 ## TODO

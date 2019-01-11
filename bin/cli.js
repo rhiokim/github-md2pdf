@@ -2,8 +2,13 @@
 
 const keypress = require('keypress')
 const meow = require('meow')
+const inquirer = require('inquirer')
+const chalk = require('chalk')
+const isBlank = require('is-blank')
+const path = require('path')
 
 const cmd  = require('../index.js')
+const questions = require('./questions.js')
 
 const cli = meow(`
   Usage
@@ -11,15 +16,25 @@ const cli = meow(`
     $ gitpdf <input> --open
 
   Options
-    --url       markdown url at github.com
-    --css       Add style tag
-    --open      Open pdf
+    --url                 Markdown url at github.com
+    --css                 Add style tag
+    --open                Open pdf
+    --o, --ouput          Output path
+    -i, --interactive     Interactive mode
 
   Examples
     $ gitpdf https://github.com/rhiokim/personal-goals/blob/master/CV.md --open
     $ gitpdf https://github.com/jquery/jquery/blob/master/README.md --css=./default.css
 `, {
   flags: {
+    interactive: {
+      type: 'boolean',
+      alias: 'i'
+    },
+    output: {
+      type: 'string',
+      alias: 'o'
+    },
     url: {
       type: 'string'
     },
@@ -43,15 +58,47 @@ const cli = meow(`
  */
 process.stdin.on('keypress', (ch, key) => {
   if (key && key.ctrl && key.name === 'c') {
-    process.stdout.write('\n사용자 강제 종료\n')
     process.exit(0);
   }
 })
 
-const url = cli.input[0]
+if (cli.flags.interactive) {
+  inquirer
+    .prompt(questions)
+    .then(answers => {
+      const url = answers.url
+      const margin = answers.margin.split(' ')
+      let output = answers.output && path.resolve(__dirname, answers.output)
 
-if (url) {
-  cmd(url, cli.flags)
+      cmd(url, cli.flags, Object.assign({}, answers, {
+          margin: {
+            top: margin[0] || 30,
+            right: margin[1] || 30,
+            bottom: margin[2] || 30,
+            left: margin[3] || 30
+          },
+          path: output || `${__dirname}/${path.basename(url)}.pdf`
+        })
+      )
+    })
 } else {
-  throw new Error('$ gitpdf https://github.com/facebook/react/blob/master/README.md')
+  const url = cli.input[0]
+
+  if (isBlank(url)) {
+    console.log(cli.help)
+    process.exit(1)
+  } else {
+    let output = cli.flags.output && path.resolve(__dirname, cli.flags.output)
+
+    cmd(url, cli.flags, {
+      margin: {
+        top: 30,
+        right: 0,
+        bottom: 30,
+        left: 0
+      },
+      path: output || `${__dirname}/${path.basename(url)}.pdf`
+    })
+  }
 }
+

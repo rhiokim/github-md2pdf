@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer')
 const path = require('path')
 
-module.exports = async (url, flags) => {
+module.exports = async (url, flags, options) => {
   puppeteer.launch({
     /* page.pdf() 는 headless: true 에서만 동작한다. */
     headless: true,
@@ -37,13 +37,12 @@ module.exports = async (url, flags) => {
     await page.emulateMedia('screen')
 
     try {
-      await page.pdf({
-        margin: {
-          top: 30,
-          bottom: 30
-        },
-        path: path.join(__dirname, 'page.pdf')
-      })
+      /**
+       * TODO:
+       * - interactive mode to configure
+       *  https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagepdfoptions
+       */
+      await page.pdf(options)
     } catch (err) {
       console.log(err)
     }
