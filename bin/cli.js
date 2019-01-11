@@ -12,10 +12,12 @@ const cli = meow(`
 
   Options
     --url       markdown url at github.com
+    --css       Add style tag
     --open      Open pdf
 
   Examples
     $ gitpdf https://github.com/rhiokim/personal-goals/blob/master/CV.md --open
+    $ gitpdf https://github.com/jquery/jquery/blob/master/README.md --css=./default.css
 `, {
   flags: {
     url: {
@@ -23,6 +25,9 @@ const cli = meow(`
     },
     open: {
       type: 'boolean'
+    },
+    css: {
+      type: 'string'
     }
   }
 })

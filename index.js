@@ -15,9 +15,6 @@ module.exports = async (url, flags) => {
 
     await page.goto(url)
 
-    // const html = await page.$eval('div#readme', e => e.outerHTML);
-
-    // console.log(html)
     const bodyHandle = await page.$('body');
     await page.evaluate(body => {
       const el = body.querySelector('div#readme')
@@ -27,7 +24,15 @@ module.exports = async (url, flags) => {
       body.innerHTML = html
     }, bodyHandle)
 
-    // await page.setContent(html)
+    /**
+     * TODO:
+     * - work with remote url
+     */
+    if (flags.css) {
+      await page.addStyleTag({
+        path: path.resolve(__dirname, flags.css)
+      })
+    }
 
     await page.emulateMedia('screen')
 
