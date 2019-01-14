@@ -49,7 +49,9 @@ module.exports = async (url, flags, options) => {
       console.log(err)
     }
 
-    opn(options.path)
+    if (flags.open) {
+      opn(options.path)
+    }
 
     browser.close()
   })
