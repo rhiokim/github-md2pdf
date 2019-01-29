@@ -30,7 +30,6 @@ $ gitpdf --help
 ## TODO
 
 - [ ] Support various options to print PDF such as margin, padding, paper size and etc
-- [ ] Progress spinner
 
 ## License
 

@@ -6,6 +6,7 @@ const inquirer = require('inquirer')
 const chalk = require('chalk')
 const isBlank = require('is-blank')
 const path = require('path')
+const ora = require('ora')
 
 const cmd  = require('../index.js')
 const questions = require('./questions.js')
@@ -64,13 +65,25 @@ process.stdin.on('keypress', (ch, key) => {
   }
 })
 
+const spinner = ora('Genenrating PDF')
+
+/**
+ * Interactive mode
+ */
 if (cli.flags.interactive) {
   inquirer
     .prompt(questions)
     .then(answers => {
       const url = answers.url
       const margin = answers.margin.split(' ')
-      let output = answers.output && path.resolve(__dirname, answers.output)
+      let output = answers.output && path.resolve(cwd, answers.output)
+
+      if (isBlank(url)) {
+        console.log(cli.help)
+        process.exit(1)
+      }
+
+      spinner.start()
 
       cmd(url, cli.flags, Object.assign({}, answers, {
           margin: {
@@ -90,7 +103,10 @@ if (cli.flags.interactive) {
     console.log(cli.help)
     process.exit(1)
   } else {
-    let output = cli.flags.output && path.resolve(__dirname, cli.flags.output)
+    let output = cli.flags.output && path.resolve(cwd, cli.flags.output)
+    output = output || `${cwd}/${path.basename(url)}.pdf`
+
+    spinner.start()
 
     cmd(url, cli.flags, {
       margin: {
@@ -106,8 +122,9 @@ if (cli.flags.interactive) {
         opn(output)
       }
 
-      // spinner.succeed()
-      // process.exit(0)
+      spinner.text = 'Done'
+      spinner.succeed()
+      process.exit(0)
     }).catch(err => {
       throw err
     })
