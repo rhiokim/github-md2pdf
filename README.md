@@ -27,6 +27,11 @@ $ gitpdf --help
     $ gitpdf https://github.com/jquery/jquery/blob/master/README.md --css=./default.css
 ```
 
+## TODO
+
+- [ ] Support various options to print PDF such as margin, padding, paper size and etc
+- [ ] Progress spinner
+
 ## License
 
 MIT
