@@ -1,30 +1,30 @@
 # GitPDF
 
+If you enjoy markdown on Github.com, sometime you want to generate PDF from Github markdown
+
 ## How to use
 
 ```bash
 $ npm install -g gitpdf
+```
 
-# basic
-$ gitpdf [URL]
+```bash
+$ gitpdf --help
 
-# add custom css
-$ gitpdf [URL] --css=./my.css
+  Usage
+    $ gitpdf <input>
+    $ gitpdf <input> --open
 
-# output path
-$ gitpdf [URL] --output=./output/result.pdf
+  Options
+    --url                 Markdown url at github.com
+    --css                 Add style tag
+    --open                Open pdf
+    -o, --ouput           Output path
+    -i, --interactive     Interactive mode
 
-# open preview after print to PDF
-$ gitpdf [URL] --open
-
-# e.g.
-$ gitpdf https://github.com/rhiokim/gitpdf/blob/master/README.md
-$ gitpdf https://github.com/jquery/jquery/blob/master/README.md --css=./my.css --output=./result.pdf --open
-
-
-# interactive mode
-$ gitpdf -i
-$ gitpdf --interactive
+  Examples
+    $ gitpdf https://github.com/rhiokim/gitpdf/blob/master/README.md --open
+    $ gitpdf https://github.com/jquery/jquery/blob/master/README.md --css=./default.css
 ```
 
 ## License

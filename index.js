@@ -1,6 +1,7 @@
 const puppeteer = require('puppeteer')
 const path = require('path')
 const opn = require('opn')
+const cwd = process.cwd()
 
 module.exports = async (url, flags, options) => {
   puppeteer.launch({
@@ -9,8 +10,7 @@ module.exports = async (url, flags, options) => {
     defaultViewport: {
       width: 1280,
       height: 800
-    },
-    args: ['--lang=ko-KR,ko']
+    }
   }).then(async browser => {
     const page = (await browser.pages())[0]
 
@@ -32,7 +32,7 @@ module.exports = async (url, flags, options) => {
      */
     if (flags.css) {
       await page.addStyleTag({
-        path: path.resolve(__dirname, flags.css)
+        path: path.resolve(cwd, flags.css)
       })
     }
 
@@ -44,13 +44,9 @@ module.exports = async (url, flags, options) => {
        * - interactive mode to configure
        *  https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagepdfoptions
        */
-      await page.pdf(options)
+      return await page.pdf(options)
     } catch (err) {
-      console.log(err)
-    }
-
-    if (flags.open) {
-      opn(options.path)
+      throw err
     }
 
     browser.close()

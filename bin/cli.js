@@ -23,7 +23,7 @@ const cli = meow(`
     -i, --interactive     Interactive mode
 
   Examples
-    $ gitpdf https://github.com/rhiokim/personal-goals/blob/master/CV.md --open
+    $ gitpdf https://github.com/rhiokim/gitpdf/blob/master/README.md --open
     $ gitpdf https://github.com/jquery/jquery/blob/master/README.md --css=./default.css
 `, {
   flags: {
@@ -53,6 +53,8 @@ const cli = meow(`
     ...
 }
 */
+
+const cwd = process.cwd()
 /**
  * prompts 모듈이 동작할 때 Ctrl + C 가 정상 동작오류 개선
  */
@@ -77,7 +79,7 @@ if (cli.flags.interactive) {
             bottom: margin[2] || 30,
             left: margin[3] || 30
           },
-          path: output || `${__dirname}/${path.basename(url)}.pdf`
+          path: output || `${cwd}/${path.basename(url)}.pdf`
         })
       )
     })
@@ -97,8 +99,19 @@ if (cli.flags.interactive) {
         bottom: 30,
         left: 0
       },
-      path: output || `${__dirname}/${path.basename(url)}.pdf`
+      path: output
+    }).then(response => {
+
+      if (cli.flags.open) {
+        opn(output)
+      }
+
+      // spinner.succeed()
+      // process.exit(0)
+    }).catch(err => {
+      throw err
     })
+
   }
 }
 
