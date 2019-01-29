@@ -30,6 +30,8 @@ $ gitpdf --help
 ## TODO
 
 - [ ] Support various options to print PDF such as margin, padding, paper size and etc
+- [ ] Multiple markdown files
+- [ ] Support to print PDF from any kinds of markdown page
 
 ## License
 
